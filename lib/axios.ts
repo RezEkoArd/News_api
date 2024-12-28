@@ -1,7 +1,7 @@
 import axios from "axios"
-import { config } from "process"
 
-const baseUrl = process.env.NEXt_PUBLIC_API_URL
+
+const baseUrl = process.env.NEXT_PUBLIC_API_URL
 
 
 const axiosInstance = axios.create({
