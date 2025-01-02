@@ -1,5 +1,5 @@
 export interface User<T> {
-    ID : Number;    
+    id : Number;    
     email: string;
     name: string;
     password: string;
