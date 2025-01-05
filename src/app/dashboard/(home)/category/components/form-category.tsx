@@ -5,12 +5,11 @@ import { FC, useEffect, useState } from "react";
 import { setupInterceptor } from "../../../../../../lib/axios";
 import { useRouter } from "next/navigation";
 import { categoryFormSchema } from "../lib/validation";
-import { createCategory } from "../lib/action";
+import { createCategory, editCategory } from "../lib/action";
 import Swal from "sweetalert2";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import SubmitButtonForm from "../../components/submit-button";
-
 
 interface FormCategoryProps {
   type?: "ADD" | "EDIT";
@@ -23,6 +22,12 @@ const FormCategoryPage: FC<FormCategoryProps> = ({ type, defaultValues }) => {
 
   const [title, setTitle] = useState("");
   const [error, setError] = useState<string[]>([]);
+
+  useEffect(() => {
+    if (type == "EDIT" && defaultValues) {
+      setTitle(defaultValues.title);
+    }
+  }, [type, defaultValues]);
 
   const handleCategory = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -41,18 +46,44 @@ const FormCategoryPage: FC<FormCategoryProps> = ({ type, defaultValues }) => {
         return;
       }
 
-      await createCategory({ title: title });
+      if (type === "ADD") {
+        await createCategory({ title: title });
 
-      Swal.fire({
-        icon: "success",
-        title: "success",
-        text: "Kategory berhasil disimpan",
-        toast: true,
-        showConfirmButton: false,
-        timer: 1500,
-      });
+        Swal.fire({
+          icon: "success",
+          title: "success",
+          text: "Kategory berhasil disimpsan",
+          toast: true,
+          showConfirmButton: false,
+          timer: 1500,
+        });
 
-      router.push("/dashboard/category")
+        router.push("/dashboard/category");
+      } else  {
+        if(defaultValues?.id) {
+          await editCategory({title: title}, defaultValues.id);
+          Swal.fire({
+            icon: "success",
+            title: "success",
+            text: "Kategori Berhasil diubah.",
+            toast: true,
+            showConfirmButton: false,
+            timer: 1500,
+          });
+          router.back();
+          
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "Oops!",
+            text: "ID Kategori tidak ada.",
+            toast: true,
+            showConfirmButton: false,
+            timer: 1500,
+          });
+        }
+      }
+      
     } catch (error: any) {
       Swal.fire({
         icon: "error",
@@ -63,35 +94,44 @@ const FormCategoryPage: FC<FormCategoryProps> = ({ type, defaultValues }) => {
         timer: 1500,
       });
 
-      setError(error instanceof Error ? [error.message] : ["An unexpected error occurred"]);
+      setError(
+        error instanceof Error
+          ? [error.message]
+          : ["An unexpected error occurred"]
+      );
     }
   };
 
   return (
     <>
-        <form onSubmit={handleCategory} className="space-y-4">
-            {error.length > 0 && (
-                <div className="mx-auto my-7 bg-red-500 w-[400px] p-4 round-lg text-white">
-                    <div className="font-bold mb-4">
-                        <ul className="list-dist list-inside">
-                            {error?.map((value, index) => (
-                                <li key={index}> {value}</li>
-                            ))}
-                        </ul>
-                    </div>
-                </div>
-            )}
-
-            <div className="space-y-2">
-                <Label htmlFor="title">
-                    Judul
-                </Label>
-                <Input placeholder="Judul..." name="title" id="title" onChange={(e) => setTitle(e.target.value)} required />
-                <SubmitButtonForm />
+      <form onSubmit={handleCategory} className="space-y-4">
+        {error.length > 0 && (
+          <div className="mx-auto my-7 bg-red-500 w-[400px] p-4 round-lg text-white">
+            <div className="font-bold mb-4">
+              <ul className="list-dist list-inside">
+                {error?.map((value, index) => (
+                  <li key={index}> {value}</li>
+                ))}
+              </ul>
             </div>
-        </form>
+          </div>
+        )}
+
+        <div className="space-y-2">
+          <Label htmlFor="title">Judul</Label>
+          <Input
+            placeholder="Judul..."
+            name="title"
+            id="title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            required
+          />
+          <SubmitButtonForm />
+        </div>
+      </form>
     </>
-  )
+  );
 };
 
 export default FormCategoryPage;

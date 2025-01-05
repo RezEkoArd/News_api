@@ -5,6 +5,7 @@ import { Category } from "@/model/Category";
 import { ColumnDef } from "@tanstack/react-table";
 import { Pencil } from "lucide-react";
 import Link from "next/link";
+import DeleteCategoryPage from "./delete-category";
 
 export const columns: ColumnDef<Category>[] = [
   {
@@ -28,6 +29,8 @@ export const columns: ColumnDef<Category>[] = [
               Edit
             </Link>
           </Button>
+
+          <DeleteCategoryPage id={category.id} />
         </div>
       );
     },

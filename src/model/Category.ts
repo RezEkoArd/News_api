@@ -1,5 +1,5 @@
 export interface Category {
-    id : Number;    
+    id : number;    
     title: string;
     slug: string;
     created_by_name: string;
