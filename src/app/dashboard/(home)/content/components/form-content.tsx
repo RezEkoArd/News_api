@@ -17,7 +17,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { createContent, UploadImage } from "../lib/action";
+import { createContent, editContent, UploadImage } from "../lib/action";
 import { Textarea } from "@/components/ui/textarea";
 
 interface FormContentProps {
@@ -87,6 +87,19 @@ const FormContentPage: FC<FormContentProps> = ({
     }
   }, [categoryList]);
 
+  useEffect(() => {
+    if(type === "EDIT" && defaultValues) {
+      setTitle(defaultValues.title);
+      setExcerpt(defaultValues.excerpt);
+      setDescription(defaultValues.description);
+      setCategoryId(defaultValues.category_id.toString());
+      setTags(defaultValues.tags.toString());
+      setStatus(defaultValues.status);
+      setPreviewImage(defaultValues.image);
+    }
+  }, [type, defaultValues])
+
+
   const handleContent = async (e: React.FormEvent) => {
     e.preventDefault();
     setError([]);
@@ -129,7 +142,7 @@ const FormContentPage: FC<FormContentProps> = ({
           description: excerpt,
           excerpt: description,
           image: imageUrl.data.urlImage,
-          category_id: Number(categoryId),
+          category_id: parseInt(categoryId),
           tags: tags,
           status: status,
         })
@@ -137,13 +150,13 @@ const FormContentPage: FC<FormContentProps> = ({
         Swal.fire({
           icon: "success",
           title: "success", 
-          text: "Konten berhasil disimpsan",
+          text: "Konten berhasil disimpan",
           toast: true,
           showConfirmButton: false,
           timer: 1500,
         });
 
-        router.push("/dashboard/category");
+        router.push("/dashboard/content");
       
       }
 
@@ -157,9 +170,39 @@ const FormContentPage: FC<FormContentProps> = ({
       }
 
       if (defaultValues?.id) {
+        await editContent({
+            title: title,
+            excerpt: excerpt,
+            description: description,
+            image: imageUrl.data? imageUrl.data.urlImage: imageUrl,
+            category_id: parseInt(categoryId),
+            tags: tags,
+            status: status,
+        },defaultValues?.id)
 
-      }
-    } catch (error: any) {
+        Swal.fire({
+            icon: "success",
+            title: "success",
+            text: "Konten berhasil diubah",
+            toast: true,
+            showConfirmButton: false,
+            timer: 1500
+        });
+
+        router.push("/dashboard/content")
+    } else {
+        Swal.fire({
+            icon: "error",
+            title: "Oops!",
+            text: "ID Kategori wajib diisi.",
+            toast: true,
+            showConfirmButton: false,
+            timer: 1500
+        });
+
+        window.location.reload();
+    }
+    } catch (error: any) { 
       Swal.fire({
         icon: "error",
         title: "Oops!",
@@ -175,7 +218,7 @@ const FormContentPage: FC<FormContentProps> = ({
           : ["An unexpected error occurred"]
       );
     } finally {
-      setIsUploading(false);
+      setIsUploading(false);    
     }
   };
 
@@ -234,7 +277,7 @@ const FormContentPage: FC<FormContentProps> = ({
               onChange={(e) => setExcerpt(e.target.value)}
               required
             />
-          </div>
+          </div> 
 
           <div className="space-y-2">
             <Label htmlFor="tags">Tags</Label>
@@ -271,8 +314,7 @@ const FormContentPage: FC<FormContentProps> = ({
               id="image"
               type="file"
               accept="image/*"
-              onChange={handleImageChange}
-              required
+              onChange={handleImageChange}  
             />
           </div>
 

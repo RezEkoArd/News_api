@@ -5,6 +5,8 @@ import { Content } from "@/model/Content";
 import { ColumnDef } from "@tanstack/react-table";
 import { Pencil } from "lucide-react";
 import Link from "next/link";
+import DeleteCategoryPage from "../../category/components/delete-category";
+import DeleteContent from "./delete-content";
 
 
 export const columns: ColumnDef<Content>[] = [
@@ -45,11 +47,12 @@ export const columns: ColumnDef<Content>[] = [
       return (
         <div className="inline-flex gap-5 items-center">
           <Button variant="secondary" size="sm" asChild>
-            <Link href={`/dashboard/contents/edit/${content.id}`}>
+            <Link href={`/dashboard/content/edit/${content.id}`}>
               <Pencil className="mr-2 h-4 w-4" />
               Edit
             </Link>
           </Button>
+          <DeleteContent id={content.id} />
 
         </div>
       );
