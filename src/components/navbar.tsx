@@ -115,7 +115,7 @@ export default function NavBar() {
             <div className="order-2 -ml-4 mt-4 flex w-full flex-col items-center justify-start md:hidden">
               {categories.map((category) => (
                   <Link
-                    href={`/category\${category.id}`}
+                    href={`/category/${category.id}`}
                     key={category.id}
                     className="w-full px-5 py-2 text-sm font-medium text-gray-600 hover:text-blue-500 "
                   >
@@ -129,3 +129,4 @@ export default function NavBar() {
     </div>
   );
 }
+ 

@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { geistSans, geistMono } from "@/lib/font";
 import "./globals.css";
 import NavBar from "@/components/navbar";
 import Footer from "@/components/footer";
@@ -14,17 +13,18 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // const fontClasses = `${geistSans.className} ${geistMono.className} antialiased`;
 
   return (
-    <html lang="en">  
-      <body className="antiliased text-gray-800" suppressHydrationWarning >
+    <html lang="en">
+    <body className="antialiased text-gray-800 flex min-h-screen flex-col">
+      <div className="container px-8 mx-auto xl:px-5 max-w-screen-lg">
         <NavBar />
-        <main className="container px-8 mx-auto xl:px-5 max-w-screen-lg py-5 lg:py-8">
-        {children}
+        <main className="py-5 lg:py-8">
+          {children}
         </main>
         <Footer />
-      </body>
-    </html>
+      </div>
+    </body>
+  </html>
   );
 }

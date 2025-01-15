@@ -28,7 +28,6 @@ interface DeleteCategoryPageProps {
         if (result.isConfirmed) {
             try {
                 await deleteCategory(id);
-
                 Swal.fire({
                     icon: "success",
                     title: "success",
@@ -39,15 +38,29 @@ interface DeleteCategoryPageProps {
                   });
 
                   window.location.reload();
-            } catch (error) {
-                Swal.fire({
-                    icon: "error",
-                    title: "Oops!",
-                    text: "ID Kategori tidak ada.",
-                    toast: true,
-                    showConfirmButton: false,
-                    timer: 1500,
-                  });
+            } catch (error: any) {
+                
+                if (error.status == 500) {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Oops!",
+                        text: error.response.data.message,
+                        toast: true,
+                        showConfirmButton: false,
+                        timer: 1500,
+                      });
+                } else {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Oops!",
+                        text: "ID Category tidak ada",
+                        toast: true,
+                        showConfirmButton: false,
+                        timer: 1500,
+                      });
+                    
+                }
+
             }
         }
     };
