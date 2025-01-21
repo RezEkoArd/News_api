@@ -18,7 +18,6 @@ export default function Home() {
           "/fe/contents"
         );
         const sliced = resp.data.data.slice(0, 2);
-        console.log(resp)
         setContents(resp.data.data);
         setSliceData(sliced);
         setContents((prevContents) => prevContents.slice(2));
@@ -43,34 +42,34 @@ export default function Home() {
         {sliceData.map((content) => (
           <div className="group cursor-pointer" key={content.id}>
             <div className="overflow-hidden rounded-md bg-gray-100 transition-all hover:scale-105 ">
-              <Link className="relative block aspect-video" href={""}>
+              <Link className="relative block aspect-video" href={`/content-all/detail/${content.id}`}>
                 {content.image != "" && (
-                  <Image
+                  <img
                     src={content.image}
                     alt={content.title}
-                    width={600}
-                    height={400}
-                    className="object-cover transition-all"
-                  ></Image>
+                    // width={600}
+                    // height={400}
+                    className="object-cover h-96 w-screen"
+                  />
                 )}
               </Link>
             </div>
             <div>
               <div>
                 <div className="flex gap-3">
-                  <Link href={""}>
+                  <Link href={`/category/${content.category_id}`}>
                     <span className="intline-block text-sx font-medium tracking-wider uppercase mt-5 text-blue-600">{content.category_name}</span>
                   </Link>
                 </div>
                 <h2 className="txt-lg font-semibold leading-snug tracking-tight mt-2">
-                  <Link href={""}>
+                  <Link href={`/content-all/detail/${content.id}`}>
                     <span className="bg-gradient-to-r from-green-200 to-green-100 bg-[length:0px_10px] bg-left-bottom bg-no-repeat transition-[backgroud-size] duration-500 hover:bg-[length:100%_3px]">
                       {content.title}
                     </span>
                   </Link>
                 </h2>
                 <div className="mt-3 flex items-center space-x-3 text-gray-500">
-                  <Link href={""}>
+                  <Link href={`/content-all/detail/${content.id}`}>
                     <div className="flex items-center gap-3">
                       <div className="relative h-5 w-5 flex-shrink-0">
                         <img src="https://placehold.co/32x32" alt="author" className="rounded-full object-cover" sizes="20px" />
@@ -90,9 +89,9 @@ export default function Home() {
         {contents.map((content, index) => (
           <div className="group cursor-pointer" key={index}>
             <div className="overflow-hidden rounded-md bg-gray-100 transition-all hover:scale-105">
-              <Link className="relative block aspect-ratio" href={""}>
+              <Link className="relative block aspect-ratio" href={`/content-all/detail/${content.id}`}>
                 {content.image != "" && (
-                  <Image src={content.image} alt={content.title} width={600} height={400} className="object-cover transition-all"/>
+                  <img src={content.image} alt={content.title}  className="object-cover h-80 w-screen"/>
                 )}
 
                 {content.image == "" && (
@@ -108,14 +107,14 @@ export default function Home() {
                   </Link>
                 </div>
                 <h2 className="txt-lg font-semibold leading-snug tracking-tight mt-2">
-                  <Link href={""}>
+                  <Link href={`/content-all/detail/${content.id}`}>
                     <span className="bg-gradient-to-r from-green-200 to-green-100 bg-[length:0px_10px] bg-left-bottom bg-no-repeat transition-[backgroud-size] duration-500 hover:bg-[length:100%_3px]">
                       {content.title}
                     </span>
                   </Link>
                 </h2>
                 <div className="mt-3 flex items-center space-x-3 text-gray-500">
-                  <Link href={""}>
+                  <Link href={`/content-all/detail/${content.id}`}>
                     <div className="flex items-center gap-3">
                       <div className="relative h-5 w-5 flex-shrink-0">
                         <img src="https://placehold.co/32x32" alt="author" className="rounded-full object-cover" sizes="20px" />

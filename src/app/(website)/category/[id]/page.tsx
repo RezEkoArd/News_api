@@ -2,38 +2,34 @@
 
 import { ApiResponse, Pagination } from "@/model/ApiResponse";
 import { Content } from "@/model/Content";
-import React, { useEffect, useState } from "react";
-
+import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, ArrowRight } from "lucide-react";
+import React from "react";
 import axiosInstance from "../../../../../lib/axios";
 
 type Params = {
-  id: number;
-};
-
-interface ContentByCategoryPageProps {
-  params: Promise<Params>;
+  id: number
 }
 
-export default function ContentByCategory({
-  params,
-}: ContentByCategoryPageProps) {
-  const resolveParams = React.use(params);
+interface ContentByCategoryPageProps {
+  params: Promise<Params>
+}
+
+export default function ContentByCategory({params}: ContentByCategoryPageProps) {
+  const resolvedParams = React.use(params) 
   const [contents, setContents] = useState<Content[]>([]);
   const [pagination, setPagination] = useState<Pagination | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
 
   const fetchData = async (page: number = 1) => {
     try {
-      const response = await axiosInstance.get<ApiResponse<Content[]>>(
-        `/fe/contents/categoryID=${resolveParams.id}limit=3&page=${page}`
-      );
-      setContents(response.data.data);
-      setPagination(response.data.pagination ?? null);
+        const response = await axiosInstance.get<ApiResponse<Content[]>>(`/fe/contents?categoryID=${resolvedParams.id}&limit=3&page=${page}`);
+        setContents(response.data.data);
+        setPagination(response.data.pagination ?? null)
     } catch (error: any) {
       Swal.fire({
         icon: "error",
@@ -43,24 +39,25 @@ export default function ContentByCategory({
         showConfirmButton: false,
         timer: 1500,
       });
-    }
+    } 
   };
 
   useEffect(() => {
     fetchData(currentPage);
   }, [currentPage]);
 
+
   const handlePrevClick = () => {
     if (pagination && currentPage > 1) {
-      setCurrentPage(currentPage - 1);
-    }
-  };
+        setCurrentPage(currentPage - 1);
+    } 
+  }
 
   const handleNextClick = () => {
     if (pagination && currentPage < pagination.total_pages) {
-      setCurrentPage(currentPage + 1);
+        setCurrentPage(currentPage + 1);
     }
-  };
+  }
 
   return (
     <div>
@@ -75,14 +72,12 @@ export default function ContentByCategory({
           {contents.map((content, index) => (
             <div key={index} className="group cursor-pointer">
               <div className="overflow-hidden rounded-md bg-gray-100 transition-all hover:scale-105">
-                <Link href={""} className="relative block aspect-ratio">
+                <Link href={`/content-all/detail/${content.id}`} className="relative block aspect-ratio">
                   {content.image != "" && (
-                    <Image
+                    <img
                       src={content.image}
                       alt={content.title}
-                      width={600}
-                      height={400}
-                      className="object-cover transition-all"
+                      className="object-cover h-80 w-screen"
                     />
                   )}
 
@@ -97,7 +92,7 @@ export default function ContentByCategory({
               </div>
               <div>
                 <div className="flex gap-3">
-                  <Link href={""}>
+                  <Link href={`/category/${content.category_id}`}>
                     <span className="inline-block text-sm font-medium tracking-wider uppercase mt-5 text-blue-600">
                       {content.category_name}
                     </span>
@@ -133,28 +128,20 @@ export default function ContentByCategory({
           ))}
         </div>
 
-        {pagination && (
-          <div className="mt-10 flex items-center justify-center">
-            <nav className="isolated inline-flex -space-x-px rounded-md shadow-sm">
-              <Button
-                onClick={handlePrevClick}
-                disabled={currentPage === 1}
-                className="relative inline-flex items-center gap-1 rounded-l-md border border-gray-300 bg-white px-3 py-2 pr-4 text-sm font-medium text-gray-500 hover:bg-gray-50 focus:z-20 disabled:pointer-events-none disabled:opacity-40"
-              >
-                <ArrowLeft className="h-33 w-3 stroke-1" />
-                <span>Sebelumnya</span>
-              </Button>
+        {pagination  && (
+            <div className="mt-10 flex items-center justify-center">
+                <nav className="isolated inline-flex gap-3  -space-x-px rounded-md shadow-sm">
+                    <Button onClick={handlePrevClick} disabled={currentPage === 1} className="relative inline-flex items-center gap-1 rounded-l-md border border-gray-300 bg-white px-3 py-2 pr-4 text-sm font-medium text-gray-500 hover:bg-gray-50 focus:z-20 disabled:pointer-events-none disabled:opacity-40">
+                        <ArrowLeft className="h-33 w-3 stroke-1" />
+                        <span>Sebelumnya</span>
+                    </Button>
 
-              <Button
-                onClick={handleNextClick}
-                disabled={pagination.total_pages <= currentPage}
-                className="relative inline-flex items-center gap-1 rounded-l-md border border-gray-300 bg-white px-3 py-2 pr-4 text-sm font-medium text-gray-500 hover:bg-gray-50 focus:z-20 disabled:pointer-events-none disabled:opacity-40"
-              >
-                <ArrowRight className="h-33 w-3 stroke-1" />
-                <span>Selanjutnya</span>
-              </Button>
-            </nav>
-          </div>
+                    <Button onClick={handleNextClick} disabled={pagination.total_pages <= currentPage} className="relative inline-flex items-center gap-1 rounded-l-md border border-gray-300 bg-white px-3 py-2 pr-4 text-sm font-medium text-gray-500 hover:bg-gray-50 focus:z-20 disabled:pointer-events-none disabled:opacity-40">
+                        <ArrowRight className="h-33 w-3 stroke-1" />
+                        <span>Selanjutnya</span>
+                    </Button>
+                </nav>
+            </div>
         )}
       </div>
     </div>

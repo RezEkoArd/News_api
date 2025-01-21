@@ -62,14 +62,12 @@ export default function ContentAll() {
           {contents.map((content, index) => (
             <div key={index} className="group cursor-pointer">
               <div className="overflow-hidden rounded-md bg-gray-100 transition-all hover:scale-105">
-                <Link href={""} className="relative block aspect-ratio">
+                <Link href={`/content-all/detail/${content.id}`} className="relative block aspect-ratio">
                   {content.image != "" && (
-                    <Image
+                    <img
                       src={content.image}
                       alt={content.title}
-                      width={600}
-                      height={400}
-                      className="object-cover transition-all"
+                      className="object-cover h-80 w-screen"
                     />
                   )}
 
@@ -91,7 +89,7 @@ export default function ContentAll() {
                   </Link>
                 </div>
                 <h2 className="text-lg font-semibold leading-snug tracking-tight mt-2">
-                  <Link href={""}>
+                  <Link href={`/content-all/detail/${content.id}`}>
                     <span className="bg-gradient-to-r from-green-500 to-green-100 bg-[length:0px_10px] bg-left-bottom bg-no-repeat  transition-[background-size] duration-500 hover:bg-[length:100%_3px]"></span>
                     {content.title}
                   </Link>
@@ -120,7 +118,7 @@ export default function ContentAll() {
           ))}
         </div>
 
-        {pagination && (
+        {pagination  && (
             <div className="mt-10 flex items-center justify-center">
                 <nav className="isolated inline-flex -space-x-px rounded-md shadow-sm">
                     <Button onClick={handlePrevClick} disabled={currentPage === 1} className="relative inline-flex items-center gap-1 rounded-l-md border border-gray-300 bg-white px-3 py-2 pr-4 text-sm font-medium text-gray-500 hover:bg-gray-50 focus:z-20 disabled:pointer-events-none disabled:opacity-40">
