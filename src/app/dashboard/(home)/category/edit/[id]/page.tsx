@@ -1,6 +1,6 @@
 "use client"
 
-import { FC, useEffect, useState } from "react"
+import React, { FC, useEffect, useState } from "react"
 import axiosInstance, { setupInterceptor } from "../../../../../../../lib/axios"
 import { Category } from "@/model/Category";
 import { ApiResponse } from "@/model/ApiResponse";
@@ -13,12 +13,13 @@ type Params = {
 }
 
 interface EditCategoryPageProps {
-    params: Params
+    params: Promise<Params>
 }
 
 const EditCategoryPage:FC<EditCategoryPageProps>  = ({ params }) => {
     setupInterceptor();
 
+    const resolveParams = React.use(params)
     const [category,setCategory] = useState<Category | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
@@ -27,7 +28,7 @@ const EditCategoryPage:FC<EditCategoryPageProps>  = ({ params }) => {
         const fetchData = async () => {
             try {
                 setLoading(true);
-                const response = await axiosInstance.get<ApiResponse<Category>>(`/admin/categories/${params.id}`);
+                const response = await axiosInstance.get<ApiResponse<Category>>(`/admin/categories/${resolveParams.id}`);
                 setCategory(response.data.data);
             } catch (error: any) {
                 setError(error.message || "Error Fetching Data");
@@ -37,7 +38,7 @@ const EditCategoryPage:FC<EditCategoryPageProps>  = ({ params }) => {
         }
         fetchData();
         
-    },[params.id])
+    },[resolveParams.id])
 
     if(loading) {
         return <div>Loading ...</div>

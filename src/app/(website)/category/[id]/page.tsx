@@ -5,7 +5,6 @@ import { Content } from "@/model/Content";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import Link from "next/link";
-import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import React from "react";

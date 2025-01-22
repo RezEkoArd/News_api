@@ -6,7 +6,7 @@ import axiosInstance from "../../../../../../lib/axios";
 import { ApiResponse } from "@/model/ApiResponse";
 import Swal from "sweetalert2";
 import Link from "next/link";
-import Image from "next/image";
+
 
 type Params = {
   id: number;
